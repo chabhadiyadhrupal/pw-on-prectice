@@ -1,0 +1,19 @@
+using UnityEngine;
+using System.Collections;
+
+public class Example : MonoBehaviour
+{
+    void Start()
+    {
+        StartCoroutine(MyCoroutine());
+    }
+
+    IEnumerator MyCoroutine()
+    {
+        // Your code before the delay
+
+        yield return new WaitForSeconds(5f); // 5-second delay
+
+        // Your code after the delay
+    }
+}
