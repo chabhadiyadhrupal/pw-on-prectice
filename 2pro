@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class PowerObstacleController : MonoBehaviour
+{
+    public GameObject player;
+    public GameObject powerObject;
+    public GameObject obstacles;
+
+    bool isPowerActive = true;
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (isPowerActive && other.gameObject == player && powerObject != null)
+        {
+            DeactivatePowerAndApplyKinetic();
+        }
+    }
+
+    void DeactivatePowerAndApplyKinetic()
+    {
+        isPowerActive = false; // Power is no longer active
+
+        powerObject.SetActive(false); // Deactivate the power GameObject
+
+        Rigidbody[] obstacleRigidbodies = obstacles.GetComponentsInChildren<Rigidbody>();
+
+        foreach (Rigidbody rb in obstacleRigidbodies)
+        {
+            rb.isKinematic = true; // Set Rigidbody to kinematic
+        }
+
+        // Coroutine to wait for 5 seconds and reset Rigidbody, then destroy power GameObject
+        StartCoroutine(ResetKinematicAndDestroyPower());
+    }
+
+    IEnumerator ResetKinematicAndDestroyPower()
+    {
+        yield return new WaitForSeconds(5f);
+
+        Rigidbody[] obstacleRigidbodies = obstacles.GetComponentsInChildren<Rigidbody>();
+
+        foreach (Rigidbody rb in obstacleRigidbodies)
+        {
+            rb.isKinematic = false; // Reset Rigidbody to non-kinematic
+        }
+
+        Destroy(powerObject); // Destroy the power GameObject
+    }
+}
