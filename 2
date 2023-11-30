@@ -1,0 +1,36 @@
+using UnityEngine;
+using System.Collections;
+
+public class Example : MonoBehaviour
+{
+    public Rigidbody rb;
+
+    void Start()
+    {
+        StartCoroutine(ApplyForceFor5Seconds());
+    }
+
+    IEnumerator ApplyForceFor5Seconds()
+    {
+        // Your code before the force
+
+        // Check if the Rigidbody is present
+        if (rb != null)
+        {
+            rb.isKinematic = true; // Set to true
+
+            // Apply force or do other operations here
+            rb.AddForce(Vector3.forward * 10f, ForceMode.Impulse);
+
+            yield return new WaitForSeconds(5f); // 5-second delay
+
+            rb.isKinematic = false; // Set back to false after 5 seconds
+        }
+        else
+        {
+            Debug.LogError("Rigidbody not assigned!");
+        }
+
+        // Your code after the force
+    }
+}
