@@ -1,0 +1,50 @@
+using UnityEngine;
+
+public class TouchDeactivateAndKinetic : MonoBehaviour
+{
+    public Rigidbody rb;
+
+    void Update()
+    {
+        // Check for touch on the object
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            RaycastHit hit;
+
+            // Check if the touch hits the object
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject)
+            {
+                DeactivateAndApplyKinetic();
+            }
+        }
+    }
+
+    void DeactivateAndApplyKinetic()
+    {
+        gameObject.SetActive(false); // Deactivate the object
+
+        if (rb != null)
+        {
+            rb.isKinematic = true; // Set Rigidbody to kinematic
+
+            // Coroutine to wait for 5 seconds and reset Rigidbody
+            StartCoroutine(ResetKinematicAfterDelay());
+        }
+        else
+        {
+            Debug.LogError("Rigidbody not assigned!");
+        }
+    }
+
+    IEnumerator ResetKinematicAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (rb != null)
+        {
+            rb.isKinematic = false; // Reset Rigidbody to non-kinematic
+        }
+    }
+}
