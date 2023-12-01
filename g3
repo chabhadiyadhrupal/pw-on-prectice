@@ -1,0 +1,58 @@
+public class PlayerController : MonoBehaviour
+{
+    private bool isPowerActive = false;
+    private bool canMove = true;
+    private Rigidbody rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && !isPowerActive)
+        {
+            // Handle touch to power game object
+            // Deactivate power game object
+            isPowerActive = true;
+
+            // Restrict player movement for 5 seconds
+            StartCoroutine(RestrictMovement());
+        }
+
+        // Other player movement code here
+    }
+
+    IEnumerator RestrictMovement()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(5f);
+        canMove = true;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            // Game over logic here
+        }
+    }
+}
+
+public class ObstacleController : MonoBehaviour
+{
+    void Start()
+    {
+        // Deactivate kinetic body or set as trigger initially
+        StartCoroutine(ActivateKineticBody());
+    }
+
+    IEnumerator ActivateKineticBody()
+    {
+        yield return new WaitForSeconds(5f);
+
+        // Activate kinetic body or remove trigger
+        GetComponent<Rigidbody>().isKinematic = false;
+    }
+}
