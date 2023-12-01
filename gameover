@@ -1,0 +1,24 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float forceMagnitude = 10f;
+    private bool canAddForces = true;
+
+    void Update()
+    {
+        if (canAddForces)
+        {
+            // Add your code to apply forces here, e.g., using Rigidbody.AddForce
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            canAddForces = false;
+            // Add your game over logic here
+        }
+    }
+}
