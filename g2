@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float forceMagnitude = 10f;
+    private bool canAddForces = true;
+    private bool hasPower = false;
+
+    private void Start()
+    {
+        // Example: Start the coroutine when the game starts.
+        StartCoroutine(PowerDuration());
+    }
+
+    void Update()
+    {
+        if (canAddForces && hasPower)
+        {
+            // Add forces while the player has power
+            // You can customize this based on your specific game mechanics
+            // e.g., using Rigidbody.AddForce
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("PowerGameObject"))
+        {
+            // Player touched the power GameObject
+            hasPower = true;
+            StartCoroutine(PowerDuration());
+        }
+
+        if (collision.gameObject.CompareTag("Obstacle") && !hasPower)
+        {
+            // Obstacle collision without power, trigger game over
+            canAddForces = false;
+            // Add your game over logic here
+        }
+    }
+
+    IEnumerator PowerDuration()
+    {
+        yield return new WaitForSeconds(5f);
+
+        // Power duration expired
+        hasPower = false;
+    }
+}
